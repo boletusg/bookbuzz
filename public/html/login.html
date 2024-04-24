@@ -1,0 +1,26 @@
+{{define "login"}}
+  <!DOCTYPE html>
+  <html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="stylesheet" href="public/css/login_style.css">
+  </head>
+  <body>
+  <div class="block">
+    <img class="imgformat" src="img/logo.png" alt="логотип компании"><br>
+    <form class="form_input">
+      <input class="input_style" type="text" name="login" placeholder="Логин" align="center" required> <br>
+      <input class="input_style" type="password" name="password" placeholder="Пароль" required align="center"><br>
+    </form>
+    <form class="form_btn">
+      <button class="btn_one" align="center">Войти</button><br>
+      <button class="btn_two" align="center">Зарегистрироваться</button><br>
+    </form>
+    <div class="text">
+      <p align="center">Приветственные слова</p>
+    </div>
+  </div>
+  </body>
+  </html>
+{{end}}
