@@ -2,6 +2,8 @@ package main
 
 import (
 	"bookbuzz/app/controller"
+	"bookbuzz/app/model"
+	_ "bookbuzz/app/model"
 	"bookbuzz/app/server"
 	"github.com/julienschmidt/httprouter"
 	"log"
@@ -9,12 +11,10 @@ import (
 )
 
 func routes(r *httprouter.Router) {
-	//путь к папке со внешними файлами: html, js, css, изображения и т.д.
 	r.ServeFiles("/public/*filepath", http.Dir("public"))
-	//что следует выполнять при входящих запросах указанного типа и по указанному адресу
 	r.GET("/", controller.StartPage)
-	r.GET("/users", controller.GetUsers)
-	r.POST("/user/add", controller.AddUser)
+	r.GET("/home", controller.HomePage)  // Добавленный маршрут для домашней страницы
+	r.POST("/login", model.LoginHandler) // Изменили метод на POST для обработки отправки данных формы
 }
 func main() {
 	//инициализируем подключение к базе данных
@@ -27,7 +27,7 @@ func main() {
 	routes(r)
 	//прикрепляемся хосту и порту для приема и обслуживания входящих запросов
 	//вторым параметром передается роутер, который будет работать с запросами
-	err = http.ListenAndServe("localhost:4444", r)
+	err = http.ListenAndServe(":8080", r) // Замените "localhost:4444" на ":8080" или другой желаемый порт
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -23,3 +23,12 @@ func StartPage(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		return
 	}
 }
+
+// LoginPage обработчики для страниц
+func LoginPage(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	http.ServeFile(w, r, "public/login.html")
+}
+
+func HomePage(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	http.ServeFile(w, r, "public/home.html")
+}
