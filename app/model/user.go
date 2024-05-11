@@ -2,11 +2,12 @@ package model
 
 import (
 	"database/sql"
-	"errors"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"log"
 	"net/http"
 
-	_ "github.com/denisenkom/go-mssqldb" // Импорт драйвера базы данных
+	_ "github.com/denisenkom/go-mssqldb" // Драйвер MSSQL для Go
 )
 
 type User struct {
@@ -17,6 +18,43 @@ type User struct {
 	Nickname     string `json:"nickname" db:"nickname"`
 }
 
+func AuthHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Установка соединения с базой данных MSSQL
+	db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// Получение введенных данных из формы
+	login := r.FormValue("login")
+	password := r.FormValue("password")
+
+	// Проверка введенных данных с данными в базе данных
+	query := "SELECT COUNT(*) FROM users2 WHERE login_user = ? AND password_user = ?"
+	var count int
+	err = db.QueryRow(query, login, password).Scan(&count)
+	if err != nil {
+		log.Println("Ошибка при выполнении запроса:", err)
+		http.Error(w, "Ошибка сервера", http.StatusInternalServerError)
+		return
+	}
+
+	if count > 0 {
+		// Вход успешен, выполните необходимые действия (например, установка сессии пользователя)
+		fmt.Fprintln(w, "Вход успешен")
+	} else {
+		// Неверные учетные данные
+		fmt.Fprintln(w, "Неверные учетные данные")
+	}
+}
+
+/*
 // AuthenticateUser Функция для проверки введенных учетных данных пользователя
 func AuthenticateUser(username, password string) (*User, error) {
 	// Здесь вы можете реализовать логику проверки пользователя
@@ -82,3 +120,4 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	// Аутентификация прошла успешно, перенаправление пользователя на домашнюю страницу
 	http.ServeFile(w, r, "home.html")
 }
+*/
