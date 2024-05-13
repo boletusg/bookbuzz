@@ -2,12 +2,10 @@ package model
 
 import (
 	"database/sql"
-	"fmt"
-	"github.com/julienschmidt/httprouter"
+	"encoding/json"
+	_ "github.com/denisenkom/go-mssqldb" // Драйвер MSSQL для Go
 	"log"
 	"net/http"
-
-	_ "github.com/denisenkom/go-mssqldb" // Драйвер MSSQL для Go
 )
 
 type User struct {
@@ -17,107 +15,135 @@ type User struct {
 	Name         string `json:"name_user" db:"name_user"`
 	Nickname     string `json:"nickname" db:"nickname"`
 }
-
-func AuthHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	if r.Method != http.MethodPost && r.Method != http.MethodGet {
-		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Установка соединения с базой данных MSSQL
-	db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	// Получение введенных данных из формы
-	login := r.FormValue("login")
-	password := r.FormValue("password")
-
-	// Проверка введенных данных с данными в базе данных
-	query := "SELECT COUNT(*) FROM users2 WHERE login_user = ? AND password_user = ?"
-	var count int
-	err = db.QueryRow(query, login, password).Scan(&count)
-	if err != nil {
-		log.Println("Ошибка при выполнении запроса:", err)
-		http.Error(w, "Ошибка сервера", http.StatusInternalServerError)
-		return
-	}
-
-	if count > 0 {
-		// Вход успешен, выполните необходимые действия (например, установка сессии пользователя)
-		fmt.Fprintln(w, "Вход успешен")
-	} else {
-		// Неверные учетные данные
-		fmt.Fprintln(w, "Неверные учетные данные")
-	}
+type Response struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
 }
 
-/*
-// AuthenticateUser Функция для проверки введенных учетных данных пользователя
-func AuthenticateUser(username, password string) (*User, error) {
-	// Здесь вы можете реализовать логику проверки пользователя
-	// Например, сравнение данных с данными в базе данных или другом источнике данных
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		// Отображение страницы login.html
+		http.ServeFile(w, r, "public/html/login.html")
+	} else if r.Method == "POST" {
+		// Получение логина и пароля из формы входа
+		login := r.FormValue("login")
+		password := r.FormValue("password")
 
-	// Создайте подключение к базе данных
-	db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	// Выполните запрос к базе данных для получения пользователя по логину
-	row := db.QueryRow("SELECT id_user, login_user, password_user, name_user, nickname FROM users WHERE login_user = ?", username)
-
-	// Инициализируйте переменные для хранения значений из базы данных
-	var id int
-	var login, userPassword, name, nickname string
-
-	// Сканируйте значения из результата запроса в переменные
-	err = row.Scan(&id, &login, &userPassword, &name, &nickname)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			// Пользователь не найден, возвращаем ошибку
-			return nil, errors.New("пользователь не найден")
+		// Подключение к базе данных
+		db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
+		if err != nil {
+			log.Fatal(err)
 		}
-		return nil, err
-	}
+		defer db.Close()
 
-	// Проверьте, совпадают ли введенные пароль и пароль пользователя из базы данных
-	if password != userPassword {
-		// Неверный пароль, возвращаем ошибку
-		return nil, errors.New("неправильный логин или пароль")
-	}
+		// Подготовка SQL-запроса для проверки логина и пароля в таблице users2
+		query := "SELECT COUNT(*) FROM users2 WHERE login_user = ? AND password_user = ?"
+		var count int
+		err = db.QueryRow(query, login, password).Scan(&count)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	// Создайте объект User с данными пользователя из базы данных
-	user := &User{
-		Id:           id,
-		Login:        login,
-		UserPassword: userPassword,
-		Name:         name,
-		Nickname:     nickname,
-	}
+		var response Response
 
-	// Возвращаем пользовательскую запись и ошибку (если есть)
-	return user, nil
+		if count > 0 {
+			// Логин и пароль найдены в базе данных, выполните необходимые действия
+			// например, перенаправление на другую страницу или установка сессии пользователя
+			response.Success = true
+			response.Message = "Успешная аутентификация!"
+
+		} else {
+			// Логин и пароль не найдены в базе данных
+			// выполните необходимые действия, например, отображение сообщения об ошибке
+			response.Message = "Неверный логин или пароль!"
+		}
+
+		// Преобразование данных в формат JSON
+
+		jsonResponse, err := json.Marshal(response)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Установка заголовков для ответа
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		// Отправка ответа в формате JSON
+		w.Write(jsonResponse)
+	}
 }
 
-// LoginHandler Функция для обработки запроса на вход пользователя
-func LoginHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	// Получение данных пользователя из формы входа (например, имя пользователя и пароль)
-	username := r.FormValue("login")
-	password := r.FormValue("password")
+func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		// Отображение страницы регистрации
+		http.ServeFile(w, r, "public/html/registration_page.html")
+	} else if r.Method == "POST" {
+		var response Response
 
-	// Проверка пользователя на аутентификацию
-	_, err := AuthenticateUser(username, password)
+		// Получение данных пользователя из формы регистрации
+		nickname := r.FormValue("nickname")
+		name := r.FormValue("name")
+		phone := r.FormValue("phonenumber")
+		password := r.FormValue("password")
+		password2 := r.FormValue("password2")
+
+		// Подключение к базе данных
+		db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
+		if err != nil {
+			http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+			log.Fatal(err)
+			return
+		}
+		defer db.Close()
+		// Проверка наличия пользователя с заданным логином
+		exists, err := checkUserExists(db, nickname)
+		// Проверка паролей на соответствие
+		if password != password2 {
+			response.Message = "Пароли не совпадают"
+		} else if err != nil {
+			http.Error(w, "Ошибка при выполнении SQL-запроса", http.StatusInternalServerError)
+			log.Fatal(err)
+			return
+		} else if exists {
+			response.Message = "Пользователь с таким логином уже существует"
+		} else {
+
+			// Подготовка SQL-запроса для вставки нового пользователя в таблицу users2
+			query := "INSERT INTO users2 (login_user, name_user, phone_user, password_user) VALUES (?, ?, ?, ?)"
+			_, err = db.Exec(query, nickname, name, phone, password)
+			if err != nil {
+				http.Error(w, "Ошибка при выполнении SQL-запроса", http.StatusInternalServerError)
+				log.Fatal(err)
+				return
+			}
+
+			// Отправка ответа об успешной регистрации
+			//w.WriteHeader(http.StatusOK)
+
+			// Отправка ответа об успешной регистрации
+			response.Success = true
+			response.Message = "Регистрация прошла успешно!"
+
+		}
+
+		jsonResponse, err := json.Marshal(response)
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		// Отправка ответа в формате JSON
+		w.Write(jsonResponse)
+	}
+}
+func checkUserExists(db *sql.DB, login string) (bool, error) {
+	query := "SELECT COUNT(*) FROM users2 WHERE login_user = ?"
+	var count int
+	err := db.QueryRow(query, login).Scan(&count)
 	if err != nil {
-		// Неверные учетные данные пользователя, отображение ошибки или перенаправление на страницу ошибки
-		http.Redirect(w, r, "/error", http.StatusFound)
-		return
+		return false, err
 	}
-
-	// Аутентификация прошла успешно, перенаправление пользователя на домашнюю страницу
-	http.ServeFile(w, r, "home.html")
+	return count > 0, nil
 }
-*/

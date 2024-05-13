@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bookbuzz/app/controller"
 	"bookbuzz/app/model"
 	_ "bookbuzz/app/model"
 	"fmt"
@@ -14,45 +13,37 @@ func routes(r *httprouter.Router) {
 	//r.ServeFiles("/public/*filepath", http.Dir("public"))
 	//r.GET("/", controller.StartPage)
 	//r.GET("/home", controller.HomePage) // Добавленный маршрут для домашней страницы
-	r.GET("/login", controller.LoginPage)
-	r.POST("/login", model.AuthHandler) // Изменили метод на POST для обработки отправки данных формы
-	r.HandleMethodNotAllowed = false    // Отключаем автоматическую обработку методов, чтобы использовать кастомную обработку OPTIONS
-	r.OPTIONS("/login", handleOptions)  // Добавляем обработчик OPTIONS для маршрута /login
+	//r.GET("/login", controller.LoginPage)
+	//r.POST("/login", model.AuthHandler) // Изменили метод на POST для обработки отправки данных формы
+	//r.HandleMethodNotAllowed = false   // Отключаем автоматическую обработку методов, чтобы использовать кастомную обработку OPTIONS
+	//r.OPTIONS("/login", handleOptions) // Добавляем обработчик OPTIONS для маршрута /login
 	fs := http.FileServer(http.Dir("public/html"))
 	r.Handler("GET", "/public/*filepath", http.StripPrefix("/public/", fs))
+	//r.GET("/registration_page", model.RegistrationPage) // Добавляем маршрут для страницы регистрации
+	//r.POST("/registration_page", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	//	model.RegistrationPage(w, r)
+	//})
+
 }
-func handleOptions(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Allow", "POST, GET, OPTIONS") // Устанавливаем заголовок Allow, указывающий разрешенные методы
-	w.WriteHeader(http.StatusNoContent)
-}
+
 func main() {
+	r := httprouter.New()
+	routes(r)
 	// Обработчик для статических файлов
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/", fs)
 
 	// Обработчик для маршрута /login
-	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/login", model.LoginHandler)
+
+	http.HandleFunc("/registration_page", model.RegisterHandler)
+	http.HandleFunc("/regform", model.RegisterHandler)
+
+	http.HandleFunc("/home", model.HomeHandler)
 
 	// Запуск сервера на порту 8080
 	fmt.Println("Сервер запущен на порту 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
-}
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		// Отображение страницы login.html
-		http.ServeFile(w, r, "public/html/login.html")
-	} else if r.Method == "POST" {
-		// Обработка отправленных данных
-		// Извлечение данных из формы
-		username := r.FormValue("login")
-		password := r.FormValue("password")
-
-		// Дальнейшая обработка данных
-		// ...
-
-		// Отправка ответа клиенту
-		fmt.Fprintf(w, "Данные получены: username=%s, password=%s", username, password)
-	}
 }
 
 /*

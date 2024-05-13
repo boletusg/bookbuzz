@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="../css/registration_style.css">
+</head>
+<body>
+  <div class="content">
+    <img class="imgformat" src="../img/logo.png" alt="логотип компании">
+    <form id="regForm" class="form_input"  method="post" action="http://localhost:8080/registration_page">
+      <input class="input_style" type="text" name="nickname" placeholder="Никнейм / логин">
+      <input class="input_style" type="text" name="name" placeholder="Ваше имя">
+      <input class="input_style" type="text" name="phonenumber" placeholder="Номер телефона">
+      <input class="input_style" type="password" name="password" placeholder="Придумайте пароль">
+      <input class="input_style" type="password" name="password2" placeholder="Повторите пароль">
+
+    </form>
+    <div class="form_btn">
+      <input type="submit" form="regForm" class="btn_one" value="Зарегистрироваться" />
+    </div>
+    <div class="text">
+      <p align="center">Приветственные слова</p>
+    </div>
+  </div>
+  <script src="../js/reg_message.js"></script>
+  <script src="../js/go_login.js"></script>
+</body>
+</html>
