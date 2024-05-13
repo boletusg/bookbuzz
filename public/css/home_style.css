@@ -1,0 +1,126 @@
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #9A9797;
+}
+.container{
+    display: grid;
+    grid-auto-rows: 60px 1fr;
+    grid-template-areas:
+  "header"
+  "content"
+}
+.header_block{
+    grid-area: header;
+}
+.header_site{
+    background: #C1BFBF;
+    width: 100%;
+    height: 60px;
+    margin: 0;
+    padding: 0;
+    border-radius: 0.50rem;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.5);
+    background-clip: padding-box;
+
+    display: grid;
+    grid-template-columns: 120px 200px 1fr 50px 50px 50px;
+    grid-template-rows: 5px 1fr 5px;
+    grid-template-areas:
+    ". . . . . ."
+    "logo searchstr . btn1 btn2 btn3"
+    ". . . . . .";
+}
+.logo{
+    grid-area: logo;
+    margin-left: 20px;
+}
+.search_str{
+    grid-area: searchstr;
+    margin-top: 10px;
+}
+.btn1{
+    grid-area: btn1;
+    position: relative; /* Добавьте относительное позиционирование */
+}
+.dropdown_menu {
+    border: 1px solid #000000; /* Граница меню */
+    background-color: rgba(168, 58, 58, 0.8); /* Фон меню */
+    padding: 10px; /* Внутренний отступ меню */
+    direction: rtl; /* Выравнивание содержимого меню влево */
+    position: absolute; /* Добавьте позиционирование абсолютное */
+    right: 0; /* Разместите меню справа */
+    border-radius: 0.50rem;
+}
+.dropdown_menu li {
+    border-bottom: 1px solid #000000; /* Разделительные линии между пунктами */
+    text-align: right; /* Размещаем текст пунктов по правому краю */
+}
+.dropdown_menu li:last-child {
+    border-bottom: none; /* Убираем разделительную линию после последнего пункта */
+}
+.dropdown_menu ul {
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем внутренний отступ */
+    margin: 0; /* Убираем внешний отступ */
+
+}
+.dropdown_menu li a {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: black; /* Задаем черный цвет текста */
+}
+.hidden {
+    display: none;
+}
+
+.btn2{
+    grid-area: btn2;
+}
+.btn3{
+    grid-area: btn3;
+}
+.btns{
+    margin-top: 5px;
+    margin-bottom: 5px; /* Небольшой отступ снизу */
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 0.15rem 0.15rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-color: #A83A3A;
+    border: 1px solid #000000;
+    background-clip: padding-box;
+    border-radius: 0.50rem;
+    align-self: center;
+}
+.input_style {
+    display: block;
+    width: 200px;
+    height: 30px;
+    padding: 0.35rem 0.8rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #D9D9D9;
+    background-clip: padding-box;
+    border: 1px solid #bdbdbd;
+    border-radius: 0.50rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.content {
+    grid-area: content;
+
+    width: 100%;
+}
+.orders {
+    background-color: #f2f2f2; /* Цвет фона */
+    border-radius: 10px; /* Скругленные края */
+    padding: 10px; /* Отступы внутри контейнера */
+    margin-bottom: 10px; /* Отступ снизу */
+}

@@ -40,6 +40,8 @@ func main() {
 	http.HandleFunc("/regform", model.RegisterHandler)
 
 	http.HandleFunc("/home", model.HomeHandler)
+	http.HandleFunc("/order_page", model.OrderHandler)
+	//	http.HandleFunc("/new_order", model.NewOrderHandler)
 
 	// Запуск сервера на порту 8080
 	fmt.Println("Сервер запущен на порту 8080")
