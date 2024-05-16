@@ -2,12 +2,17 @@ body {
     font-family: 'Comic Sans MS', cursive, sans-serif;
     background-color: #9A9797;
 }
-.container{
+.conteiner{
     display: grid;
-    grid-auto-rows: 60px 1fr;
+    grid-auto-rows: 60px 20px 200px 10px 1fr 10px 30px;
     grid-template-areas:
   "header"
-  "content"
+  "."
+  "bio"
+  "."
+  "catalog"
+  "."
+  "date_create";
 }
 .header_block{
     grid-area: header;
@@ -113,11 +118,101 @@ body {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.content {
-    grid-area: content;
-
+.bio{
+    grid-area: bio;
+    display: grid;
+    grid-template-columns: 30px 150px 50px 1fr 30px 200px 30px;
+    grid-template-areas:
+  ". avatar . info . btns_acc ."
+}
+.avatar{
+    grid-area: avatar;
+}
+.avatar_img{
+    border: 2px solid #000000;
+    border-radius: 0.50rem;
+}
+.info{
+    grid-area: info;
+}
+.btns_acc{
+    grid-area: btns_acc;
+    display: grid;
+    grid-template-rows: 30px 10px 30px 20px 30px 10px 30px;
+    grid-template-areas:
+  "log"
+  "."
+  "edit"
+  "."
+  "link1"
+  "."
+  "link2";
+}
+.log{
+    grid-area: log;
+    background-color: #A83A3A;
+}
+.edit{
+    grid-area: edit;
+    background-color: #6D6D6D;
+}
+.btn_acc{
+    border: 1px solid #000000;
+    border-radius: 0.50rem;
+    width: 150px;
+    margin-left: auto;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+.link1{
+    grid-area: link1;
+    background-color: #9A9797;
+    border: 1px solid #000000;
+    border-radius: 0.50rem;
     width: 100%;
+    padding: 0.35rem 0.8rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.login{
+    background-color: #6D6D6D;
+    border: 1px solid #000000;
+    border-radius: 0.50rem;
+    width: 300px;
+    height: 30px;
+    padding: 0.35rem 0.8rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+.status{
+    background-color: #C1BFBF;
+    border: 1px solid #000000;
+    border-radius: 0.50rem;
+    width: 550px;
+    height: 30px;
+    padding: 0.35rem 0.8rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.biography{
+    background-color: #C1BFBF;
+    border: 1px solid #000000;
+    border-radius: 0.50rem;
+    width: 100%;
+    height: 80px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: left;
+    padding: 5px;
+    word-break: break-word;
+    width: 100%;
+    resize: vertical;
+    font-size: 17px;
 }
 a{
     color: black;
 }
+

@@ -1,0 +1,235 @@
+body {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #9A9797;
+}
+.conteiner{
+  display: grid;
+  grid-auto-rows: 60px 1fr;
+  grid-template-areas:
+  "header"
+  "content"
+}
+.header_block{
+  grid-area: header;
+}
+.header_site{
+  background: #C1BFBF;
+  width: 100%;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  border-radius: 0.50rem;
+  border: 1px solid #000000;
+  background-clip: padding-box;
+
+  display: grid;
+  grid-template-columns: 120px 200px 1fr 50px 50px 50px;
+  grid-template-rows: 5px 1fr 5px;
+  grid-template-areas:
+    ". . . . . ."
+    "logo searchstr . btn1 btn2 btn3"
+    ". . . . . .";
+}
+.logo{
+  grid-area: logo;
+  margin-left: 20px;
+}
+.search_str{
+  grid-area: searchstr;
+  margin-top: 10px;
+}
+.btn1{
+  grid-area: btn1;
+  position: relative;
+}
+.dropdown_menu {
+  border: 1px solid #000000;
+  background-color: rgba(168, 58, 58, 0.8);
+  padding: 10px;
+  direction: rtl;
+  position: absolute;
+  right: 0;
+  border-radius: 0.50rem;
+}
+.dropdown_menu li {
+  border-bottom: 1px solid #000000;
+  text-align: right;
+}
+.dropdown_menu li:last-child {
+  border-bottom: none;
+}
+.dropdown_menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+}
+.dropdown_menu li a {
+  text-decoration: none;
+  color: black;
+}
+.hidden {
+  display: none;
+}
+
+.btn2{
+  grid-area: btn2;
+}
+.btn3{
+  grid-area: btn3;
+}
+.btns{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: block;
+  width: 40px;
+  height: 40px;
+  padding: 0.15rem 0.15rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  background-color: #A83A3A;
+  border: 1px solid #000000;
+  background-clip: padding-box;
+  border-radius: 0.50rem;
+  align-self: center;
+}
+.input_style {
+  display: block;
+  width: 200px;
+  height: 30px;
+  padding: 0.35rem 0.8rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #D9D9D9;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.50rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.content {
+  grid-area: content;
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+  grid-template-rows: 10px 80px 10px 1fr 20px 30px 20px;
+  grid-template-areas:
+    ". . ."
+    ". title ."
+    ". . ."
+    ". order ."
+    ". . ."
+    ". btn5 ."
+    ". . .";
+  width: 100%;
+}
+.title{
+  grid-area: title;
+}
+.htitle{
+  font-size: 45px;
+}
+.order {
+  grid-area: order;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  background-color: #D9D9D9;
+  border-radius: 0.50rem;
+  border: 1px solid #000000;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 20px 1fr 20px;
+  grid-template-rows: 20px 45px 20px 1fr 20px;
+  grid-template-areas:
+    ". . ."
+    ". header_order ."
+    ". . ."
+    ". description ."
+    ". . .";
+}
+.header_order{
+  grid-area: header_order;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 40px auto;
+  grid-template-areas:
+  "order_input . btn_attach";
+}
+.btn5{
+  grid-area: btn5;
+  display: grid;
+  grid-template-columns: 1fr 250px 1fr;
+  grid-template-areas:
+    ". send_btn .";
+}
+.send_btn{
+  grid-area: send_btn;
+  height: 30px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  border: 1px solid #000000;
+  border-radius: 0.50rem;
+  background-color: #A83A3A;
+  font-size: 17px;
+}
+.order_input {
+  grid-area: order_input;
+  display: flex;
+  flex-direction: column;
+}
+.btn_attach {
+  grid-area: btn_attach;
+  margin-left: auto;
+}
+.attach_btn{
+  background-color: #817E7E;
+  border: 1px solid #000000;
+  border-radius: 0.50rem;
+}
+.description_wrapper {
+  grid-area: description;
+  order: 2;
+  flex-grow: 1;
+}
+input.description {
+  width: 100%;
+  box-sizing: border-box;
+}
+.title_order{
+  order: 1;
+  height: 45px;
+  width: 800px;
+  background-color: #817E7E;
+  border: 1px solid #000000;
+  border-radius: 0.50rem;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-size: 25px;
+}
+.description{
+  background-color: #E9E9E9;
+  border: 1px solid #000000;
+  border-radius: 0.50rem;
+  height: 350px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  text-align: left;
+  padding: 5px;
+  word-break: break-word;
+  width: 100%;
+  resize: vertical;
+  font-size: 17px;
+}
+::placeholder {
+  color: black;
+}
+description::placeholder{
+  position: absolute;
+  top: 0;
+  left: 5px;
+  line-height: 1;
+  color: #999;
+}
+

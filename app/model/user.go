@@ -3,7 +3,9 @@ package model
 import (
 	"database/sql"
 	"encoding/json"
-	_ "github.com/denisenkom/go-mssqldb" // Драйвер MSSQL для Go
+	_ "github.com/denisenkom/go-mssqldb"
+	"github.com/gorilla/sessions"
+	_ "github.com/gorilla/sessions"
 	"log"
 	"net/http"
 )
@@ -19,6 +21,8 @@ type Response struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
+
+var store = sessions.NewCookieStore([]byte("my-secret-key"))
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
@@ -47,28 +51,38 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		var response Response
 
 		if count > 0 {
-			// Логин и пароль найдены в базе данных, выполните необходимые действия
-			// например, перенаправление на другую страницу или установка сессии пользователя
+			// Логин и пароль найдены
 			response.Success = true
 			response.Message = "Успешная аутентификация!"
-
+			var userID int
+			query := "SELECT id_user FROM users2 WHERE login_user = ? AND password_user = ?"
+			err = db.QueryRow(query, login, password).Scan(&userID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			// Создание новой сессии
+			session, err := store.New(r, "session-name")
+			if err != nil {
+				log.Fatal(err)
+			}
+			// Сохранение идентификатора пользователя в сессии
+			session.Values["userID"] = userID
+			err = session.Save(r, w)
+			if err != nil {
+				log.Fatal(err)
+			}
 		} else {
 			// Логин и пароль не найдены в базе данных
-			// выполните необходимые действия, например, отображение сообщения об ошибке
 			response.Message = "Неверный логин или пароль!"
 		}
-
 		// Преобразование данных в формат JSON
-
 		jsonResponse, err := json.Marshal(response)
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		// Установка заголовков для ответа
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-
 		// Отправка ответа в формате JSON
 		w.Write(jsonResponse)
 	}
@@ -117,16 +131,10 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 				log.Fatal(err)
 				return
 			}
-
-			// Отправка ответа об успешной регистрации
-			//w.WriteHeader(http.StatusOK)
-
 			// Отправка ответа об успешной регистрации
 			response.Success = true
 			response.Message = "Регистрация прошла успешно!"
-
 		}
-
 		jsonResponse, err := json.Marshal(response)
 		if err != nil {
 			log.Fatal(err)

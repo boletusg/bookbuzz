@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Страница заказа</title>
-  <link rel="stylesheet" href="../css/order_page_style.css">
+  <title>Новое объявление</title>
+  <link rel="stylesheet" href="../css/new_order_style.css">
 </head>
 <body>
 <div class="conteiner">
@@ -31,21 +31,24 @@
     </header>
   </div>
   <div class="content">
+    <div class="title">
+      <p class="htitle">Новое объявление</p>
+    </div>
     <div class="order">
       <div class="header_order">
-        <div class="title_order">
-          <p class="title">{{.Title}}</p>
+        <form id="adform" class="order_input" action="/new_ad" method="POST">
+          <input class="title_order" name="title_ad" placeholder="Заголовок" required>
+        </form>
+        <div class="btn_attach">
+          <button class="attach_btn" name="attach"><img src="../img/attach.svg" height="40" width="40"></button>
         </div>
       </div>
-      <div class="title_author">
-        <p class="nickauthor">{{.Login}}</p>
-      </div>
-      <div class="description">
-        <p class="text_description">{{.Text}}</p>
+      <div class="description_wrapper">
+        <textarea form="adform" class="description" name="description" placeholder="Текст объявления..." required></textarea>
       </div>
     </div>
     <div class="btn5">
-      <button class="respond_btn" name="respond">Откликнуться</button>
+      <input type="submit" form="adform" class="send_btn" name="send">Отправить</input>
     </div>
   </div>
 </div>

@@ -9,7 +9,7 @@ document.getElementById("login").addEventListener("submit", function(event) {
             var response = JSON.parse(xhr.responseText);
             if (response.success) {
                 // Аутентификация прошла успешно, перенаправляем на другую страницу
-                window.location.href = "/home"; // Замените "/dashboard.html" на путь к вашей странице после успешной аутентификации
+                window.location.href = "/home";
             } else {
                 // Обработка ошибок аутентификации
                 alert(response.message);
