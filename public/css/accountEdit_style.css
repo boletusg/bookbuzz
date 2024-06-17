@@ -117,7 +117,6 @@ body {
     border-radius: 0.50rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 .bio{
     grid-area: bio;
     display: grid;
@@ -174,7 +173,6 @@ body {
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
-
 .login{
     background-color: #6D6D6D;
     border: 1px solid #000000;
@@ -197,7 +195,6 @@ body {
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
-
 .biography{
     background-color: #C1BFBF;
     border: 1px solid #000000;

@@ -38,7 +38,6 @@ body {
   border: 1px solid #bdbdbd;
   border-radius: 0.50rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
   margin-bottom: 1em;
 }
 .form_btn{
@@ -58,7 +57,6 @@ body {
   background-clip: padding-box;
   border-radius: 0.50rem;
   align-self: center;
-
 }
 .text{
   grid-area: text;

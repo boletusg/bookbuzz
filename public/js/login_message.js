@@ -1,9 +1,9 @@
-document.getElementById('login').addEventListener('submit', function(event) {
+document.getElementById('respond').addEventListener('submit', function(event) {
     event.preventDefault(); // Предотвращаем отправку формы по умолчанию
 
     var formData = new FormData(this);
 
-    fetch('http://localhost:8080/login', {
+    fetch('http://localhost:8080/order_page', {
         method: 'POST',
         body: formData
     })

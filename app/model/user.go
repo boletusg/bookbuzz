@@ -38,7 +38,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer db.Close()
+		defer func(db *sql.DB) {
+			err := db.Close()
+			if err != nil {
+			}
+		}(db)
 
 		// Подготовка SQL-запроса для проверки логина и пароля в таблице users2
 		query := "SELECT COUNT(*) FROM users2 WHERE login_user = ? AND password_user = ?"
@@ -84,7 +88,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		// Отправка ответа в формате JSON
-		w.Write(jsonResponse)
+		_, _ = w.Write(jsonResponse)
 	}
 }
 
@@ -109,7 +113,11 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 			return
 		}
-		defer db.Close()
+		defer func(db *sql.DB) {
+			err := db.Close()
+			if err != nil {
+			}
+		}(db)
 		// Проверка наличия пользователя с заданным логином
 		exists, err := checkUserExists(db, nickname)
 		// Проверка паролей на соответствие
@@ -143,7 +151,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 
 		// Отправка ответа в формате JSON
-		w.Write(jsonResponse)
+		_, _ = w.Write(jsonResponse)
 	}
 }
 func checkUserExists(db *sql.DB, login string) (bool, error) {

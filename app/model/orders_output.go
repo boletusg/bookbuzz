@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"net/http"
 	"text/template"
@@ -71,6 +72,16 @@ func OrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		log.Fatal(err)
+	}
+	session.Values["orderID"] = orderID
+	err = session.Save(r, w)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Подключение к базе данных
 	db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
 	if err != nil {
@@ -109,4 +120,71 @@ func OrderHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// RespondHandler Обработчик для записи отклика в базу данных
+func RespondHandler(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		log.Fatal(err)
+	}
+	orderID, ok := session.Values["orderID"].(string)
+	if !ok {
+		http.Error(w, "Не найден идентификатор заказа", http.StatusBadRequest)
+		return
+	}
+
+	userID, ok := session.Values["userID"].(int)
+	if !ok {
+		// Пользователь не аутентифицирован, перенаправление на страницу входа
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+	log.Printf("ID user: %v", userID)
+	log.Printf("ID order: %v", orderID)
+	// Получение идентификатора заказа из параметров запроса или пути URL
+
+	// Подключаемся к базе данных
+	db, err := sql.Open("mssql", "server=boletusg;integrated security=SSPI;database=bookbuzz")
+	if err != nil {
+		http.Error(w, "Ошибка при подключении к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	// Проверяем, есть ли уже отклик от этого пользователя на этот заказ
+	var count int
+	query := "SELECT COUNT(*) FROM response2 WHERE fk_order = ? AND fk_user = ?"
+	err = db.QueryRow(query, orderID, userID).Scan(&count)
+	if err != nil {
+		log.Printf("Ошибка при проверке наличия отклика: %v", err)
+		http.Error(w, "Ошибка при обработке отклика", http.StatusInternalServerError)
+		return
+	}
+	var response Response
+	if count > 0 {
+		// Отклик уже существует, выводим сообщение
+		w.WriteHeader(http.StatusOK)
+		response.Message = "Вы уже оставляли отклик на этот заказ."
+		return
+	} else {
+		// Записываем отклик в таблицу response2
+		query = "INSERT INTO response2 (fk_order, fk_user) VALUES (?, ?)"
+		_, err = db.Exec(query, orderID, userID)
+		if err != nil {
+			http.Error(w, "Ошибка при записи отклика в базу данных", http.StatusInternalServerError)
+			return
+		}
+		response.Success = true
+	}
+
+	// Преобразование данных в формат JSON
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Отправляем успешный ответ
+	w.WriteHeader(http.StatusOK)
+	response.Message = "Ваш отклик успешно записан."
+	_, _ = w.Write(jsonResponse)
 }

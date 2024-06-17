@@ -31,6 +31,8 @@ func main() {
 	http.HandleFunc("/account_page", model.AccountHandler)
 	http.HandleFunc("/account_edit", model.EditHandler)
 	http.HandleFunc("/new_ad", model.NewAdHandler)
+	http.HandleFunc("/respond", model.RespondHandler)
+	http.HandleFunc("/my_orders", model.RespondsHandler)
 
 	// Запуск сервера на порту 8080
 	fmt.Println("Сервер запущен на порту 8080")

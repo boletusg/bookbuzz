@@ -1,6 +1,5 @@
 document.getElementById("accountInfo").addEventListener("submit", function(event) {
     event.preventDefault(); // Предотвращаем отправку формы по умолчанию
-
     // Выполняем AJAX-запрос для обработки регистрации
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/account_edit");

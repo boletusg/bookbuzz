@@ -1,0 +1,37 @@
+.filter{
+    margin-top: 15px;
+    margin-left: 10px;
+    font-size: 18px;
+}
+input[type="radio"] {
+    transform: scale(1.5);
+}
+
+input[type="radio"]:checked {
+    transform: scale(1.5);
+}
+
+
+.respond{
+    border: 1.5px solid #505050;
+    border-radius: 0.50rem;
+    margin: 10px;
+}
+.title_respond{
+    margin: 10px;
+    background-color: #6D6D6D;
+    border-radius: 0.50rem;
+}
+.user{
+    margin: 10px;
+    background-color: #B0B0B0;
+    border-radius: 0.50rem;
+    width: 350px;
+}
+.user_link{
+    margin: 10px;
+}
+
+ #incoming-responds {
+    display: none;
+}

@@ -1,6 +1,5 @@
 document.getElementById("login").addEventListener("submit", function(event) {
     event.preventDefault(); // Предотвращаем отправку формы по умолчанию
-
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/login");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -19,7 +18,6 @@ document.getElementById("login").addEventListener("submit", function(event) {
             alert("Ошибка при выполнении AJAX-запроса");
         }
     };
-
     var formData = new FormData(document.getElementById("login"));
     xhr.send(new URLSearchParams(formData));
 });

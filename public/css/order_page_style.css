@@ -22,7 +22,6 @@ body {
   border: 1px solid #000000;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
-
   display: grid;
   grid-template-columns: 120px 200px 1fr 50px 50px 50px;
   grid-template-rows: 5px 1fr 5px;
@@ -63,7 +62,6 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-
 }
 .dropdown_menu li a {
   text-decoration: none;
@@ -72,7 +70,6 @@ body {
 .hidden {
   display: none;
 }
-
 .btn2{
   grid-area: btn2;
 }
@@ -200,7 +197,6 @@ body {
   text-align: left;
   padding: 10px;
   word-break: break-word;
-  /*width: 100%;*/
   resize: vertical;
   font-size: 17px;
 }
@@ -220,4 +216,8 @@ body {
   background-color: #A83A3A;
   font-size: 17px;
   color: #FFFFFF;
+}
+.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
