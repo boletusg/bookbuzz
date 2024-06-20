@@ -47,7 +47,7 @@
                 <div id="OutRespond" class="respond">
                     <h3 class="title_respond">{{ .Title }}</h3>
                     <p class="user"><strong>Автор заказа:</strong> {{.User}}</p>
-                    <a href="/account_user?id={{.UserID}}" class="user_link">Связаться</a>
+                    <a href="/message_page" class="user_link">Связаться</a>
                 </div>
                 {{ end }}
             </div>
@@ -56,7 +56,7 @@
                 <div id="InboxRespond" class="respond">
                     <h3 class="title_respond">{{ .Title }}</h3>
                     <p class="user"><strong>Специалист:</strong> {{.User}}</p>
-                    <a href="/account_user?id={{.UserID}}" class="user_link">Связаться</a>
+                    <a href="/message_page" class="user_link">Связаться</a>
                 </div>
                 {{ end }}
             </div>
@@ -65,5 +65,6 @@
     <script src="../js/new_orders.js"></script>
     <script src="../js/go_account.js"></script>
     <script src="../js/filtration.js"></script>
+    <script src="../js/go_messenger.js"></script>
 </body>
 </html>

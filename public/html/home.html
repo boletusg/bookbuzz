@@ -11,7 +11,7 @@
         <header class="header_site">
           <img class="logo" src="../img/logo.png" alt="Логотип компании" width="75" height="50">
           <form name="search_str" class="search_str">
-            <input class="input_style" type="search" name="search_string" placeholder="Найти...">
+            <input id="search_input" class="input_style" type="search" name="search_string" placeholder="Найти...">
           </form>
           <div class="btn1">
             <button class="btns" name="add" onclick="toggleMenu()"><img src="../img/add_icon.svg" height="35" width="35"></button>
@@ -42,10 +42,12 @@
             </div>
           {{end}}
         </div>
+      <div id="search_results"></div>
     </div>
     <script src="../js/order_output.js"></script>
     <script src="../js/new_orders.js"></script>
     <script src="../js/go_account.js"></script>
     <script src="../js/go_orders.js"></script>
+    <script src="../js/search.js"></script>
   </body>
   </html>

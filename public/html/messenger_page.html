@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Чат</title>
+    <link rel="stylesheet" href="../css/home_style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header_block">
+      <header class="header_site">
+        <img class="logo" src="../img/logo.png" alt="Логотип компании" width="75" height="50">
+        <form name="search_str" class="search_str">
+          <input id="search_input" class="input_style" type="search" name="search_string" placeholder="Найти...">
+        </form>
+        <div class="btn1">
+          <button class="btns" name="add" onclick="toggleMenu()"><img src="../img/add_icon.svg" height="35" width="35"></button>
+          <div class="dropdown_menu hidden" id="dropdown_menu">
+            <ul>
+              <li><a href="/new_order">заказ</a></li>
+              <li><a href="/new_ad">объявление</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="btn2">
+          <button id="responds-link" href="/my_orders" class="btns" name="orders"><img src="../img/orders_icon.svg" height="35" width="35"></button>
+        </div>
+        <div class="btn3">
+          <button id="account-link" href="/account_page" class="btns" name="account"><img src="../img/account_icon.svg" height="35" width="35"></button>
+        </div>
+      </header>
+    </div>
+    <div class="content">
+      <div class="chat-container">
+        <div id="message-container"></div>
+        <input type="text" id="message-input" placeholder="Введите сообщение" onkeydown="handleKeydown(event)">
+        <div id="message-container"></div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/order_output.js"></script>
+  <script src="../js/new_orders.js"></script>
+  <script src="../js/go_account.js"></script>
+  <script src="../js/go_orders.js"></script>
+
+  <script>
+    var socket;
+
+    function initWebSocket() {
+      socket = new WebSocket("ws://" + window.location.host + "/chat");
+      socket.onmessage = function(event) {
+        displayMessage(event.data);
+      };
+    }
+
+    function displayMessage(message) {
+      var messageContainer = document.getElementById("message-container");
+      var messageElement = document.createElement("div");
+      messageElement.classList.add("message");
+
+      var senderElement = document.createElement("span");
+      senderElement.classList.add("sender");
+      senderElement.textContent = "User 1: "; // Replace with actual sender name
+
+      var textElement = document.createElement("span");
+      textElement.textContent = message;
+
+      var timestampElement = document.createElement("span");
+      timestampElement.classList.add("timestamp");
+      timestampElement.textContent = new Date().toLocaleString(); // Replace with actual timestamp
+
+      messageElement.appendChild(senderElement);
+      messageElement.appendChild(textElement);
+      messageElement.appendChild(timestampElement);
+      messageContainer.appendChild(messageElement);
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+
+    function sendMessage() {
+      var messageInput = document.getElementById("message-input");
+      var message = messageInput.value;
+      socket.send(message);
+      messageInput.value = "";
+    }
+
+    function handleKeydown(event) {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    }
+
+    initWebSocket();
+  </script>
+</body>
+</html>

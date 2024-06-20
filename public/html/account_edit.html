@@ -35,7 +35,7 @@
                 <img class="avatar_img" src="../img/avatar.jpg" height="200" width="150" alt="Аватар профиля">
             </div>
             <div class="info">
-                <form id="accountInfo" action="/edit" method="POST">
+                <form id="accountInfo" action="/edit" method="POST" enctype="multipart/form-data">
                     <input name="login" class="login" value="{{.Login}}" /> <br>
                     <input name="status" class="status" value="{{.Status}}" />
                     <textarea name="biography" class="biography"  required>{{.Bio}}</textarea>
